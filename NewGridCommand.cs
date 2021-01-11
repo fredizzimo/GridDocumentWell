@@ -88,6 +88,7 @@ namespace GridDocumentWell
         /// <param name="e">Event args.</param>
         private void Execute(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             package.NewGrid();
         }
     }
