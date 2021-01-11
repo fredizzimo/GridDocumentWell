@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.PlatformUI.Shell;
+using Microsoft.VisualStudio.Shell;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
@@ -25,6 +27,7 @@ namespace GridDocumentWell
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(GridDocumentWellPackage.PackageGuidString)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class GridDocumentWellPackage : AsyncPackage
     {
         /// <summary>
@@ -46,7 +49,19 @@ namespace GridDocumentWell
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            await NewGridCommand.InitializeAsync(this);
         }
+
+        public void NewGrid()
+        {
+            var factory = new GridViewElementFactory();
+            var oldFactory = ViewElementFactory.Current;
+            ViewElementFactory.Current = factory;
+            _grids.Add((GridDocumentGroupContainer)factory.CreateDocumentGroupContainer());
+            ViewElementFactory.Current = oldFactory;
+        }
+
+        private readonly List<GridDocumentGroupContainer> _grids = new List<GridDocumentGroupContainer>();
 
         #endregion
     }
