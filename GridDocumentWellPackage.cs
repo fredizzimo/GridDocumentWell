@@ -3,8 +3,11 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows;
 using Task = System.Threading.Tasks.Task;
 
 namespace GridDocumentWell
@@ -48,6 +51,7 @@ namespace GridDocumentWell
         /// <returns>A task representing the async work of package initialization, or an already completed task if there is none. Do not return null from this method.</returns>
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
+            MergeResources();
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
@@ -58,33 +62,78 @@ namespace GridDocumentWell
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var factory = new GridViewElementFactory();
-            var oldFactory = ViewElementFactory.Current;
             ViewElementFactory.Current = factory;
-            var documentGroupContainer = factory.CreateDocumentGroupContainer();
-            _grids.Add((GridDocumentGroupContainer)documentGroupContainer);
-            var documentGroup = factory.CreateDocumentGroup();
-            documentGroupContainer.Children.Add(documentGroup);
-            ViewElementFactory.Current = oldFactory;
-
             var profile = ViewManager.Instance.WindowProfile;
-            profile.Children.Add(documentGroupContainer);
+            DocumentGroupContainer[] oldGroupContainers = profile.FindAll<DocumentGroupContainer>().Where(group => !group.GetType().Equals(typeof(GridDocumentGroupContainer)) && group.Parent != null).ToArray();
 
-            // Get the instance number 0 of this tool window. This window is single instance so this instance
-            // is actually the only one.
-            // The last flag is set to true so that if the tool window does not exists it will be created.
-            GridWindow window = (GridWindow)this.FindToolWindow(typeof(GridWindow), 0, true);
-            if ((null == window) || (null == window.Frame))
+            if (oldGroupContainers.Length == 0)
+                return;
+            using (ViewManager.Instance.DeferActiveViewChanges())
             {
-                throw new NotSupportedException("Cannot create tool window");
+                foreach (DocumentGroupContainer oldGroup in oldGroupContainers)
+                {
+                    DocumentGroupContainer newGroup = DocumentGroupContainer.Create();
+                    CopyGroupProperties(oldGroup, newGroup);
+                    ReplaceGroupContainer(oldGroup, newGroup);
+                    MoveChildrenToNewGroup(oldGroup, newGroup);
+                }
             }
-            var control = (GridWindowControl)window.Content;
-            control.DocumentGroupContainer.Content = documentGroupContainer;
-
-            IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
 
-        private readonly List<GridDocumentGroupContainer> _grids = new List<GridDocumentGroupContainer>();
+        private void CopyGroupProperties(DocumentGroupContainer oldGroup, DocumentGroupContainer newGroup)
+        {
+            LocalValueEnumerator localValueEnumerator = oldGroup.GetLocalValueEnumerator();
+            while (localValueEnumerator.MoveNext())
+            {
+                LocalValueEntry current = localValueEnumerator.Current;
+                if (!current.Property.ReadOnly)
+                {
+                    try
+                    {
+                        newGroup.SetValue(current.Property, current.Value);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+
+        private void ReplaceGroupContainer(DocumentGroupContainer oldGroup, DocumentGroupContainer newGroup)
+        {
+            ViewGroup parent = oldGroup.Parent;
+            int index = parent.Children.IndexOf(oldGroup);
+            parent.Children.Insert(index, newGroup);
+            oldGroup.Detach();
+        }
+
+        private void MoveChildrenToNewGroup(DocumentGroupContainer oldGroup, DocumentGroupContainer newGroup)
+        {
+            if (oldGroup != null && newGroup != null)
+            {
+                while (oldGroup.Children.Count != 0)
+                {
+                    ViewElement viewElement = oldGroup.Children[0];
+                    viewElement.Detach();
+                    newGroup.Children.Add(viewElement);
+                }
+            }
+        }
+
+        private void MergeResources()
+        {
+            if (Application.Current == null)
+                throw new InvalidOperationException("We need an application set.");
+            ResourceDictionary resourceDictionary = LoadResource<ResourceDictionary>("DataTemplates.xaml");
+            Application.Current.Resources.MergedDictionaries.Add(resourceDictionary);
+        }
+
+        private T LoadResource<T>(string xamlName)
+        {
+            var uri = new Uri(Assembly.GetExecutingAssembly().GetName().Name + ";component/" + xamlName, UriKind.Relative);
+            return (T)Application.LoadComponent(uri);
+        }
+
 
         #endregion
     }

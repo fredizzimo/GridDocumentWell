@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="DelegatingViewElementFactory.cs" />
     <Compile Include="GridDocumentGroupContainer.cs" />
+    <Compile Include="GridDocumentGroupContainerControl.cs" />
     <Compile Include="GridViewElementFactory.cs" />
     <Compile Include="GridWindow.cs" />
     <Compile Include="GridWindowControl.xaml.cs">
@@ -100,6 +101,10 @@
     <Content Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Datatemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GridWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
