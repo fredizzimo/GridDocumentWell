@@ -57,6 +57,7 @@
     <Compile Include="NewGridCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GridDocumentWellPackage.cs" />
+    <Compile Include="RecursiveGrid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Readme.md" />
