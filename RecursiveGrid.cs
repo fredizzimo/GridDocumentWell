@@ -45,7 +45,12 @@ namespace GridDocumentWell
                 // It's the root element
                 var newRoot = new SplitNode(NodeType.Vertical);
                 newRoot.ChildList.Add(result.node);
+                newRoot.ChildList.Add(new LeafNode(newElement));
                 _root = newRoot;
+            }
+            else
+            {
+                result.parent.ChildList.Insert(result.index + 1, new LeafNode(newElement));
             }
         }
 

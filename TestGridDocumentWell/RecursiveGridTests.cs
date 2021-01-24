@@ -6,9 +6,12 @@ using FluentAssertions;
 using IntGrid = GridDocumentWell.RecursiveGrid<int>;
 using IntNode = GridDocumentWell.RecursiveGrid<int>.INode;
 using TestIntNode = TestGridDocumentWell.TestGridNode<int>;
+using FluentAssertions.Equivalency;
 
 namespace TestGridDocumentWell
 {
+
+
     class TestGridNode<ElementType> : RecursiveGrid<ElementType>.INode
     {
         public TestGridNode()
@@ -39,6 +42,11 @@ namespace TestGridDocumentWell
 
     public class RecursiveGridTests
     {
+        EquivalencyAssertionOptions<TExpectation> NodeCompareOptions<TExpectation>(EquivalencyAssertionOptions<TExpectation> options)
+        {
+            return options.WithStrictOrdering();
+        }
+
         [Test]
         public void OneElementGrid()
         {
@@ -48,7 +56,7 @@ namespace TestGridDocumentWell
                 Type = NodeType.Element,
                 Element = 1
             };
-            grid.Root.Should().BeEquivalentTo(expected);
+            grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
         }
 
         [Test]
@@ -65,10 +73,77 @@ namespace TestGridDocumentWell
                     {
                         Type = NodeType.Element,
                         Element = 1
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 2
                     }
                 }
             };
-            grid.Root.Should().BeEquivalentTo(expected);
+            grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
+        }
+
+        [Test]
+        public void SplitVerticallyTwice()
+        {
+            var grid = new IntGrid(1);
+            grid.SplitVertically(1, 2);
+            grid.SplitVertically(2, 3);
+            IntNode expected = new TestIntNode
+            {
+                Type = NodeType.Vertical,
+                ChildList = new List<TestIntNode>
+                {
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 1
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 2
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 3
+                    }
+                }
+            };
+            grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
+        }
+
+        [Test]
+        public void SplitFirstElementVertically()
+        {
+            var grid = new IntGrid(1);
+            grid.SplitVertically(1, 2);
+            grid.SplitVertically(1, 3);
+            IntNode expected = new TestIntNode
+            {
+                Type = NodeType.Vertical,
+                ChildList = new List<TestIntNode>
+                {
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 1
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 3
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 2
+                    },
+                }
+            };
+            grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
         }
     }
 }
