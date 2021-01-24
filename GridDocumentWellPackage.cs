@@ -124,7 +124,13 @@ namespace GridDocumentWell
         {
             if (Application.Current == null)
                 throw new InvalidOperationException("We need an application set.");
-            ResourceDictionary resourceDictionary = LoadResource<ResourceDictionary>("DataTemplates.xaml");
+            MergeResource("Datatemplates.xaml");
+            MergeResource("GridDocumentGroupContainerControlStyle.xaml");
+        }
+
+        private void MergeResource(string name)
+        {
+            ResourceDictionary resourceDictionary = LoadResource<ResourceDictionary>(name);
             Application.Current.Resources.MergedDictionaries.Add(resourceDictionary);
         }
 

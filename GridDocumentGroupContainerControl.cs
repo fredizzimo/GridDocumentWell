@@ -9,9 +9,5 @@ namespace GridDocumentWell
 {
     public class GridDocumentGroupContainerControl : DocumentGroupContainerControl
     {
-        public GridDocumentGroupContainerControl()
-        {
-
-        }
     }
 }

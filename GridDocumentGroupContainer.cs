@@ -10,9 +10,5 @@ namespace GridDocumentWell
 {
     class GridDocumentGroupContainer : WMDocumentGroupContainer
     {
-        public GridDocumentGroupContainer()
-        {
-
-        }
     }
 }
