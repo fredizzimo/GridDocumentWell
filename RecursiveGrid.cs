@@ -35,6 +35,16 @@ namespace GridDocumentWell
 
         public void SplitVertically(ElementType elementToSplit, ElementType newElement)
         {
+            Split(NodeType.Vertical, elementToSplit, newElement);
+        }
+
+        public void SplitHorizontally(ElementType elementToSplit, ElementType newElement)
+        {
+            Split(NodeType.Horizontal, elementToSplit, newElement);
+        }
+
+        private void Split(NodeType mode, ElementType elementToSplit, ElementType newElement)
+        {
             var result = FindElement(elementToSplit);
             if (result == null)
             {
@@ -43,14 +53,21 @@ namespace GridDocumentWell
             if (result.parent == null)
             {
                 // It's the root element
-                var newRoot = new SplitNode(NodeType.Vertical);
+                var newRoot = new SplitNode(mode);
                 newRoot.ChildList.Add(result.node);
                 newRoot.ChildList.Add(new LeafNode(newElement));
                 _root = newRoot;
             }
-            else
+            else if (result.parent.Type == mode)
             {
                 result.parent.ChildList.Insert(result.index + 1, new LeafNode(newElement));
+            }
+            else
+            {
+                var newSplit = new SplitNode(mode);
+                newSplit.ChildList.Add(result.node);
+                newSplit.ChildList.Add(new LeafNode(newElement));
+                result.parent.ChildList[result.index] = newSplit;
             }
         }
 

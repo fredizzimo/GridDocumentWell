@@ -145,5 +145,68 @@ namespace TestGridDocumentWell
             };
             grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
         }
+
+        [Test]
+        public void SplitHorizontally()
+        {
+            var grid = new IntGrid(1);
+            grid.SplitHorizontally(1, 2);
+            IntNode expected = new TestIntNode
+            {
+                Type = NodeType.Horizontal,
+                ChildList = new List<TestIntNode>
+                {
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 1
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 2
+                    }
+                }
+            };
+            grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
+        }
+
+        [Test]
+        public void SplitVerticallyThenHorizontally()
+        {
+            var grid = new IntGrid(1);
+            grid.SplitVertically(1, 2);
+            grid.SplitHorizontally(2, 3);
+            IntNode expected = new TestIntNode
+            {
+                Type = NodeType.Vertical,
+                ChildList = new List<TestIntNode>
+                {
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 1
+                    },
+                    new TestIntNode
+                    {
+                        Type = NodeType.Horizontal,
+                        ChildList = new List<TestIntNode>
+                        {
+                            new TestIntNode
+                            {
+                                Type = NodeType.Element,
+                                Element = 2
+                            },
+                            new TestIntNode
+                            {
+                                Type = NodeType.Element,
+                                Element = 3
+                            }
+                        }
+                    },
+                }
+            };
+            grid.Root.Should().BeEquivalentTo(expected, NodeCompareOptions);
+        }
     }
 }
