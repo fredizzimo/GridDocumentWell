@@ -3,17 +3,20 @@ using GridDocumentWell;
 using System.Collections.Generic;
 using FluentAssertions;
 
+using IntGrid = GridDocumentWell.RecursiveGrid<int>;
+using IntNode = GridDocumentWell.RecursiveGrid<int>.INode;
+using TestIntNode = TestGridDocumentWell.TestGridNode<int>;
+
 namespace TestGridDocumentWell
 {
     class TestGridNode<ElementType> : RecursiveGrid<ElementType>.INode
     {
         public TestGridNode()
         {
-            _children = new List<TestGridNode<ElementType>>();
-
+            ChildList = new List<TestGridNode<ElementType>>();
         }
 
-        public RecursiveGrid<ElementType>.NodeType Type
+        public NodeType Type
         {
             get; set;
         }
@@ -25,10 +28,13 @@ namespace TestGridDocumentWell
 
         public IEnumerable<RecursiveGrid<ElementType>.INode> Children
         {
-            get { return _children; }
+            get { return ChildList; }
         }
 
-        readonly List<TestGridNode<ElementType>> _children;
+        public List<TestGridNode<ElementType>> ChildList
+        {
+            get; set;
+        }
     }
 
     public class RecursiveGridTests
@@ -36,11 +42,31 @@ namespace TestGridDocumentWell
         [Test]
         public void OneElementGrid()
         {
-            var grid = new RecursiveGrid<int>(1);
-            var expected = new TestGridNode<int>
+            var grid = new IntGrid(1);
+            IntNode expected = new TestIntNode
             {
-                Type = RecursiveGrid<int>.NodeType.Element,
+                Type = NodeType.Element,
                 Element = 1
+            };
+            grid.Root.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void SplitVertically()
+        {
+            var grid = new IntGrid(1);
+            grid.SplitVertically(1, 2);
+            IntNode expected = new TestIntNode
+            {
+                Type = NodeType.Vertical,
+                ChildList = new List<TestIntNode>
+                {
+                    new TestIntNode
+                    {
+                        Type = NodeType.Element,
+                        Element = 1
+                    }
+                }
             };
             grid.Root.Should().BeEquivalentTo(expected);
         }
