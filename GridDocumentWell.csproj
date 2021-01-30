@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DelegatingViewElementFactory.cs" />
+    <Compile Include="GridControl.xaml.cs">
+      <DependentUpon>GridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GridDocumentGroupContainer.cs" />
     <Compile Include="GridDocumentGroupContainerControl.cs" />
     <Compile Include="GridDocumentGroupPanel.cs" />
@@ -58,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GridDocumentWellPackage.cs" />
     <Compile Include="RecursiveGrid.cs" />
+    <Compile Include="VSGrid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Readme.md" />
@@ -104,6 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Datatemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

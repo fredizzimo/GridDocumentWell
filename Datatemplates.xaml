@@ -6,6 +6,10 @@
                     xmlns:vsimpl="clr-namespace:Microsoft.VisualStudio.PlatformUI.Shell;assembly=Microsoft.VisualStudio.Shell.ViewManager"
                     xmlns:gw="clr-namespace:GridDocumentWell">
     <DataTemplate x:Key="{DataTemplateKey {x:Type gw:GridDocumentGroupContainer}}" DataType="{x:Type gw:GridDocumentGroupContainer}">
+        <gw:GridControl Grid="{Binding Grid}">
+            
+        </gw:GridControl>
+        <!---
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -14,5 +18,6 @@
             <TextBlock Grid.Row="0">Hello World</TextBlock>
             <vs:DocumentGroupContainerControl ItemsControl.ItemsSource="{Binding VisibleChildren}" Grid.Row="1"/>
         </Grid>
+        !-->
     </DataTemplate>
 </ResourceDictionary>
