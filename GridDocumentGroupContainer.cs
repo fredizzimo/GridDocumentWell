@@ -45,17 +45,20 @@ namespace GridDocumentWell
                 using (ViewManager.Instance.DeferActiveViewChanges())
                 {
                     var grid = new VSGrid();
-                    grid.Direction = Direction.Horizontal;
-                    /*
-                    var control = new System.Windows.Controls.TextBox();
-                    control.Text = "Hello World";
-                    control.FontSize = 100;
-                    grid.Items.Add(control);
-                    */
-                    var control = new DocumentGroupContainerControl();
-                    control.ItemsSource = VisibleChildren;
-                    control.Orientation = System.Windows.Controls.Orientation.Horizontal;
-                    grid.Items.Add(control);
+                    foreach (var child in VisibleChildren)
+                    {
+                        grid.Direction = Direction.Horizontal;
+                        var control = new DocumentGroupContainerControl()
+                        {
+                            ItemsSource = new List<ViewElement>()
+                            {
+                                child
+                            },
+                            Orientation = System.Windows.Controls.Orientation.Horizontal
+                        };
+
+                        grid.Items.Add(control);
+                    }
                     Grid = grid;
                 }
             }
