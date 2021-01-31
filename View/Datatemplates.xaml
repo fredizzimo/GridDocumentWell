@@ -1,23 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:wm="clr-namespace:Microsoft.VisualStudio.Platform.WindowManagement;assembly=Microsoft.VisualStudio.Platform.WindowManagement"
-                    xmlns:ui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
-                    xmlns:vs="clr-namespace:Microsoft.VisualStudio.PlatformUI.Shell.Controls;assembly=Microsoft.VisualStudio.Shell.ViewManager"
-                    xmlns:vsimpl="clr-namespace:Microsoft.VisualStudio.PlatformUI.Shell;assembly=Microsoft.VisualStudio.Shell.ViewManager"
                     xmlns:gw="clr-namespace:GridDocumentWell">
     <DataTemplate x:Key="{DataTemplateKey {x:Type gw:GridDocumentGroupContainer}}" DataType="{x:Type gw:GridDocumentGroupContainer}">
-        <gw:GridControl Grid="{Binding Grid}">
-            
-        </gw:GridControl>
-        <!---
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0">Hello World</TextBlock>
-            <vs:DocumentGroupContainerControl ItemsControl.ItemsSource="{Binding VisibleChildren}" Grid.Row="1"/>
-        </Grid>
-        !-->
+        <gw:GridControl Grid="{Binding Grid}"/>
     </DataTemplate>
 </ResourceDictionary>
