@@ -50,13 +50,7 @@
       <DependentUpon>GridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="GridDocumentGroupContainer.cs" />
-    <Compile Include="GridDocumentGroupContainerControl.cs" />
-    <Compile Include="GridDocumentGroupPanel.cs" />
     <Compile Include="GridViewElementFactory.cs" />
-    <Compile Include="GridWindow.cs" />
-    <Compile Include="GridWindowControl.xaml.cs">
-      <DependentUpon>GridWindowControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NewGridCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GridDocumentWellPackage.cs" />
@@ -112,14 +106,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GridDocumentGroupContainerControlStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GridWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

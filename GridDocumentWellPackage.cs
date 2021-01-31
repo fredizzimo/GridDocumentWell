@@ -32,7 +32,6 @@ namespace GridDocumentWell
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(GridDocumentWellPackage.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(GridWindow))]
     public sealed class GridDocumentWellPackage : AsyncPackage
     {
         /// <summary>
