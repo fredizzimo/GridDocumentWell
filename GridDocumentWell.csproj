@@ -45,17 +45,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DelegatingViewElementFactory.cs" />
-    <Compile Include="GridControl.xaml.cs">
+    <Compile Include="View\DelegatingViewElementFactory.cs" />
+    <Compile Include="View\GridControl.xaml.cs">
       <DependentUpon>GridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GridDocumentGroupContainer.cs" />
-    <Compile Include="GridViewElementFactory.cs" />
-    <Compile Include="NewGridCommand.cs" />
+    <Compile Include="View\GridDocumentGroupContainer.cs" />
+    <Compile Include="View\GridViewElementFactory.cs" />
+    <Compile Include="Commands\NewGridCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GridDocumentWellPackage.cs" />
-    <Compile Include="RecursiveGrid.cs" />
-    <Compile Include="VSGrid.cs" />
+    <Compile Include="Model\RecursiveGrid.cs" />
+    <Compile Include="View\GridViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Readme.md" />
@@ -101,11 +101,11 @@
     <Content Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Datatemplates.xaml">
+    <Page Include="View\Datatemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GridControl.xaml">
+    <Page Include="View\GridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

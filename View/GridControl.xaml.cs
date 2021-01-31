@@ -28,20 +28,20 @@ namespace GridDocumentWell
 
         public static DependencyProperty GridProperty =
             DependencyProperty.Register(
-                "Grid", typeof(VSGrid), typeof(GridControl),
+                "Grid", typeof(GridViewModel), typeof(GridControl),
                 new FrameworkPropertyMetadata(OnGridChanged)
             );
 
-        public VSGrid Grid
+        public GridViewModel Grid
         {
-            get { return (VSGrid)GetValue(GridProperty); }
+            get { return (GridViewModel)GetValue(GridProperty); }
             set
             {
                 SetValue(GridProperty, value);
             }
         }
        
-        private void OnGridChanged(VSGrid value)
+        private void OnGridChanged(GridViewModel value)
         {
             Children.Clear();
             RowDefinitions.Clear();
@@ -65,7 +65,7 @@ namespace GridDocumentWell
                 var item = value.Items[i];
 
                 UIElement childElement = null;
-                if (item is VSGrid gridItem)
+                if (item is GridViewModel gridItem)
                 {
                     var innerGrid = new GridControl();
                     innerGrid.Grid = gridItem;
@@ -101,7 +101,7 @@ namespace GridDocumentWell
         DependencyPropertyChangedEventArgs e)
         {
             GridControl control = source as GridControl;
-            control.OnGridChanged((VSGrid)e.NewValue);
+            control.OnGridChanged((GridViewModel)e.NewValue);
         }
     }
 }

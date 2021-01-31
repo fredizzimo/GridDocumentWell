@@ -22,14 +22,14 @@ namespace GridDocumentWell
 
         public static DependencyProperty GridProperty =
             DependencyProperty.Register(
-                "Grid", typeof(VSGrid), typeof(GridDocumentGroupContainer)
+                "Grid", typeof(GridViewModel), typeof(GridDocumentGroupContainer)
             );
 
-        public VSGrid Grid
+        public GridViewModel Grid
         {
             get
             {
-                return (VSGrid)GetValue(GridProperty);
+                return (GridViewModel)GetValue(GridProperty);
             }
             set
             {
@@ -44,7 +44,7 @@ namespace GridDocumentWell
             {
                 using (ViewManager.Instance.DeferActiveViewChanges())
                 {
-                    var grid = new VSGrid();
+                    var grid = new GridViewModel();
                     foreach (var child in VisibleChildren)
                     {
                         grid.Direction = Direction.Horizontal;

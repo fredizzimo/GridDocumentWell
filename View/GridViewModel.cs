@@ -13,7 +13,7 @@ namespace GridDocumentWell
         Vertical,
     }
 
-    public class VSGrid
+    public class GridViewModel
     { 
         public Direction Direction { get; set; }
 
@@ -32,7 +32,7 @@ namespace GridDocumentWell
             }
         }
 
-        public VSGrid()
+        public GridViewModel()
         {
             Items = new List<object>();
         }
