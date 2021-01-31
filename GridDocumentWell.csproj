@@ -45,6 +45,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Services\GridDocumentWellService.cs" />
+    <Compile Include="Services\IGridDocumentWellService.cs" />
     <Compile Include="View\GridControl.xaml.cs">
       <DependentUpon>GridControl.xaml</DependentUpon>
     </Compile>

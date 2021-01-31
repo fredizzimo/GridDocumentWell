@@ -35,10 +35,11 @@ namespace GridDocumentWell
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private NewGridCommand(GridDocumentWellPackage package, OleMenuCommandService commandService)
+        private NewGridCommand(GridDocumentWellPackage package, OleMenuCommandService commandService, IGridDocumentWellService gridService)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            _gridService = gridService;
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
             var menuItem = new MenuCommand(this.Execute, menuCommandID);
@@ -71,12 +72,13 @@ namespace GridDocumentWell
         /// <param name="package">Owner package, not null.</param>
         public static async Task InitializeAsync(GridDocumentWellPackage package)
         {
+            var gridService = await package.GetServiceAsync(typeof(SGridDocumentWellService)) as IGridDocumentWellService;
             // Switch to the main thread - the call to AddCommand in NewGridCommand's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            Instance = new NewGridCommand(package, commandService);
+            Instance = new NewGridCommand(package, commandService, gridService);
         }
 
         /// <summary>
@@ -89,7 +91,9 @@ namespace GridDocumentWell
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            package.NewGrid();
+            _gridService.NewGrid();
         }
+
+        private IGridDocumentWellService _gridService;
     }
 }
