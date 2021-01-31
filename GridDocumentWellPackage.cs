@@ -124,7 +124,6 @@ namespace GridDocumentWell
             if (Application.Current == null)
                 throw new InvalidOperationException("We need an application set.");
             MergeResource("Datatemplates.xaml");
-            MergeResource("GridDocumentGroupContainerControlStyle.xaml");
         }
 
         private void MergeResource(string name)
@@ -135,7 +134,7 @@ namespace GridDocumentWell
 
         private T LoadResource<T>(string xamlName)
         {
-            var uri = new Uri(Assembly.GetExecutingAssembly().GetName().Name + ";component/" + xamlName, UriKind.Relative);
+            var uri = new Uri(Assembly.GetExecutingAssembly().GetName().Name + ";component/View/" + xamlName, UriKind.Relative);
             return (T)Application.LoadComponent(uri);
         }
 
